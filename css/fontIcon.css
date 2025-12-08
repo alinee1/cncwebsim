@@ -11,7 +11,7 @@
 
 [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
+    font-family: 'icomoon'  !important;
     speak: none;
     font-style: normal;
     font-weight: normal;
@@ -31,7 +31,7 @@
     content: "\e925";
 }
 .icon-lathe:before {
-    content: "\e926";
+    content: none !important; /*Ocultar Icon do torno*/
 }
 .icon-printer:before {
     content: "\e927";
@@ -201,4 +201,7 @@
 .icon-codepen:before {
     content: "\e923";
 }
-
+/*#machine_icon,
+.icon-lathe {
+    display: none !important;
+}*/
