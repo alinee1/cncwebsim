@@ -90,7 +90,7 @@ nav > ul > li > ul > li div:hover
 }
 nav > ul > li > div span 
 {
-	background:#d14826;
+	background:#375020ff;
 	display:block;
 	height:100%;
 	width:100%;
@@ -114,6 +114,7 @@ a
 }
 a:link {
     color: #dfdbd2;
+
 }
 
 /* visited link */
@@ -169,7 +170,7 @@ nav > ul > li > div:hover > span
 }
 #bottomMenu > span:hover
 {
-	color:#d14826;
+	color:#1f411b;
 	cursor: pointer;
 }
 
@@ -236,7 +237,7 @@ nav > ul > li > div:hover > span
 }
 .ui-widget-header
 {
-    background: #2F3129;
+    background: #2F3129;;
 }
 .ui-corner-all
 {
@@ -301,7 +302,7 @@ nav > ul > li > div:hover > span
 
 .notImplemented
 {
-	color: #707070;
+	color: #fff;
 }
 #messages
 {
@@ -310,4 +311,7 @@ nav > ul > li > div:hover > span
     padding: 10;
     bottom: 0;
     position: absolute;
+}
+div[id^="stats"], div[class^="stats"] { /*tirar o fps sem interferir nas outras funcionalidades*/
+    display: none !important;
 }
