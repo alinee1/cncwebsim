@@ -75,6 +75,7 @@
     height: calc(100% - 46px);
     padding: 10px;
     box-sizing: border-box;
+    overflow-y: auto;
 }
 #exerciseList {
     width: 28%;
@@ -200,7 +201,14 @@
     font-family: monospace;
     font-size: 13px;
     white-space: pre-line;
+
+    /* --- ADIÇÕES PARA A CAIXA VERDE --- */
+    background: #0d1b0c;    /* fundo verde */
+    padding: 10px;
+    border-radius: 8px;
+    overflow-y: auto;        /* permite rolar dentro da caixa */
 }
+
 .line-error { color: rgba(255,0,0,0.6); }
 .line-correct { color: #00ff00; }
 
@@ -303,9 +311,6 @@
   z-index: 9999;
   overflow: hidden;
   font-family: inherit;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 #aboutWindow .cwsx-header {
   height: 36px;
@@ -349,8 +354,7 @@
     height: 100%;
     background: rgba(0,0,0,0.75);
     z-index: 99999;
-    justify-content: center;
-    align-items: center;
+
 }
 
 /* Caixa do vídeo */
@@ -365,7 +369,9 @@
     background: #1e1b1b;
     padding: 20px 24px;
     border-radius: 10px;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     box-shadow: 0 10px 30px #132511;
     display: flex;
     flex-direction: column;
@@ -423,7 +429,6 @@
         <!-- Vídeo MP4 -->
         <video id="tutorialVideo" width="720" controls>
             <source src="images/videocnc.mp4" type="video/mp4">
-            Seu navegador não suporta vídeo HTML5.
         </video>
 
     </div>
@@ -450,7 +455,7 @@
     <button id="newFile">New</button>
     <button id="saveFile">Save</button>
     <button id="openFile">Open</button>
-    <input type="file" id="fileInputFallback" accept=".nc,.txt,.gcode" style="display:none" />
+    <input type="file" id="fileInputFallback" accept=".txt" style="display:none" />
 </div>
 
 <div id="canvasContainer">
@@ -493,7 +498,7 @@
             <div id="testContainer">
                 <label for="modeSelect">Select the mode used:</label>
                 <select id="modeSelect">
-                    <option value="G90">Absoluto G90</option>
+                    <option value="G90">absolute G90</option>
                     <option value="G91">Incremental G91</option>
                 </select>
                 <textarea id="userGcode" placeholder="Insert the G-code for correction"></textarea>
@@ -594,8 +599,8 @@ window.addEventListener("load", (function () {
         if(window.showSaveFilePicker){
             try{
                 const handle = await window.showSaveFilePicker({
-                    suggestedName: defaultName || "programa.nc",
-                    types: [{ description: "G-Code", accept: {"text/plain":[".nc",".gcode",".txt"]} }]
+                    suggestedName: defaultName || "",
+                    types: [{ description: "", accept: {"text/plain":[".txt"]} }]
                 });
                 const writable = await handle.createWritable();
                 await writable.write(code);
@@ -613,7 +618,7 @@ window.addEventListener("load", (function () {
                 const blob = new Blob([code], {type:"text/plain;charset=utf-8"});
                 const a = document.createElement("a");
                 a.href = URL.createObjectURL(blob);
-                a.download = defaultName || "programa.nc";
+                a.download = defaultName || ".txt";
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -632,7 +637,7 @@ window.addEventListener("load", (function () {
         if(window.showOpenFilePicker){
             try{
                 const [handle] = await window.showOpenFilePicker({
-                    types: [{ description: "G-Code", accept: {"text/plain":[".nc",".gcode",".txt"]} }],
+                    types: [{ description: "txt", accept: {"text/plain":[""]} }],
                     multiple: false
                 });
                 const file = await handle.getFile();
@@ -675,7 +680,7 @@ window.addEventListener("load", (function () {
     document.getElementById("saveFile").addEventListener("click", async function(e){
         e.stopPropagation();
         fileMenu.style.display = "none";
-        await saveToFile("programa.nc");
+        await saveToFile("");
     });
 
     document.getElementById("openFile").addEventListener("click", async function(e){
@@ -697,7 +702,7 @@ window.addEventListener("load", (function () {
 
     modalSaveBtn.addEventListener("click", async function(){
         modal.style.display = "none";
-        const ok = await saveToFile("programa.nc");
+        const ok = await saveToFile(".txt");
         // proceed to clear editor even if save cancelled? follow user's instructions: after Save action, then clear.
         setEditorContent("");
         showStatus("Editor limpo.");
